@@ -1,5 +1,4 @@
 const express = require('express')
-// const bodyParser = require('body-parser')
 const app = express()
 const MongoClient = require('mongodb').MongoClient
 const PORT = 3000
@@ -15,8 +14,6 @@ MongoClient.connect(dbConnectionStr, {useUnifiedTopology: true})
     console.log(`Connected to ${dbName} database`)
     db = client.db(dbName)
   })  
-
-// app.use(bodyParser.urlencoded({extended: true}))
 
 // Middleware
 // Set template engine to use ejs as a template file    
@@ -38,7 +35,7 @@ app.get('/', (req, res) => {
 
 app.post('/addRecommendation', (req, res) => {
   
-  db.collection('recommendations').insertOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, likes:0})
+  db.collection('recommendations').insertOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, mediaLikes: 0})
     .then(result => {
       console.log('Recommendation added.')
       res.redirect('/')
@@ -47,10 +44,13 @@ app.post('/addRecommendation', (req, res) => {
 })
 
 app.put('/addOneLike', (req, res) => {
-  db.collection('recommendations').updateOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, likes: req.body.mediaLikes},{
+  db.collection('recommendations').updateOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, mediaLikes: req.body.mediaLikes},{
     $set: {
       likes: req.body.mediaLikes + 1
     }
+  },{
+    sort:{_id: -1},
+    upsert: false
   })
   .then(result => {
     console.log('Added one like.')

@@ -1,12 +1,12 @@
-const deleteText = document.querySelectorAll('.fa-trash')
-const thumbText = document.querySelectorAll('.fa-thumbs-up')
+const trashCan = document.querySelectorAll('.fa-trash')
+const thumbsUp = document.querySelectorAll('.fa-thumbs-up')
 
-Array.from(deleteText).forEach((element)=>{
+Array.from(trashCan).forEach((element)=>{
   element.addEventListener('click', deleteRecommendation)
 })
 
-Array.from(thumbText).forEach((element)=>{
-  element.addEventListener('click', addLike)
+Array.from(thumbsUp).forEach((element)=>{
+  element.addEventListener('click', addOneLike)
 })
 
 async function deleteRecommendation() {
@@ -21,7 +21,7 @@ async function deleteRecommendation() {
           'mediaName': mediaName
         })
       })
-     const data = await response.json()
+    const data = await response.json()
     console.log(data)
     location.reload()
   }
@@ -30,12 +30,12 @@ async function deleteRecommendation() {
   }
 }
 
-async function addLike() {
+async function addOneLike() {
   const mediaType = this.parentNode.childNodes[1].innerText
   const mediaName = this.parentNode.childNodes[3].innerText
   const mediaLikes = Number(this.parentNode.childNodes[5].innerText)
   try {
-      const response = await fetch('addLike', {
+      const response = await fetch('addOneLike', {
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({

@@ -10,9 +10,15 @@
 <body>
   <h1>Share the queer media you love!</h1>
 
-  <form action="/recommendations" method="POST">
-    <input type="text" placeholder="name" name="name">
-    <input type="text" placeholder="media type" name="type">
+  <form action="/addRecommendation" method="POST">
+    <input type="text" placeholder="Name" name="mediaName">
+    <select name="mediaType" id="mediaType">
+      <option value="">Select media type</option>
+      <option value="Book">Book</option>
+      <option value="Miniseries">Miniseries</option>
+      <option value="Movie">Movie</option>
+      <option value="TV Show">TV Show</option>
+    </select>
     <button type="submit">Submit</button>
   </form>
 
@@ -20,9 +26,10 @@
   <ul class="recommendations">
     <% for(let i = 0; i < recommendations.length; i++) {%>
       <li class="recommendation">
-        <span><%= recommendations[i].type %>:</span>
-        <span><%= recommendations[i].name %></span>
+        <span><%= recommendations[i].mediaType %>:</span>
+        <span><%= recommendations[i].mediaName %></span>
         <span class="fa fa-thumbs-up"></span>
+        <span><%= recommendations[i].mediaLikes %></span>
         <span class="fa fa-trash"></span>
       </li>
     <% } %>  

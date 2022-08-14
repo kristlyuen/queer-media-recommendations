@@ -25,13 +25,20 @@ app.use(express.urlencoded({ extended: true }))
 // Parse incoming JSON requests
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  db.collection('recommendations').find().toArray()
-    .then(results => {
-      res.render('index.ejs', {recommendations: results})
-    })
-    .catch(error => console.error(error))
+// GET code from todo list
+app.get('/', async (req, res) => {
+  const mediaRecommendations = await db.collection('recommendations').find().toArray()
+  res.render('index.ejs', {recommendations: mediaRecommendations})
 })
+
+// GET code from rap api
+// app.get('/', (req, res) => {
+//   db.collection('recommendations').find().toArray()
+//     .then(results => {
+//       res.render('index.ejs', {recommendations: results})
+//     })
+//     .catch(error => console.error(error))
+// })
 
 app.post('/addRecommendation', (req, res) => {
   
@@ -43,10 +50,11 @@ app.post('/addRecommendation', (req, res) => {
     .catch(error => console.error(error))
 })
 
+// This is not working. The console.log is showing as expected, but nothing is happening in the database/DOM.
 app.put('/addOneLike', (req, res) => {
-  db.collection('recommendations').updateOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, mediaLikes: req.body.mediaLikes},{
+  db.collection('recommendations').updateOne({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS, mediaLikes: req.body.mediaLikesJS},{
     $set: {
-      likes: req.body.mediaLikes + 1
+      mediaLikes: req.body.mediaLikesJS + 1
     }
   },{
     sort:{_id: -1},
@@ -55,21 +63,19 @@ app.put('/addOneLike', (req, res) => {
   .then(result => {
     console.log('Added one like.')
     res.json('Like added.')
-    res.redirect('/')
   })
   .catch(error => console.error(error))
 })
 
+// This is not working. The console.log is logging as expected, but the item isn't being deleted from the database or removed from the DOM.
 app.delete('/deleteRecommendation', (req, res) => {
-  db.collection('recommendations').deleteOne({mediaType: req.body.mediaType, mediaName: req.body.mediaName, likes: req.body.mediaLikes})
+  db.collection('recommendations').deleteOne({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS, mediaLikes: req.body.mediaLikesJS})
   .then(result => {
-      console.log('Recommendation deleted.')
+      console.log({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS, mediaLikes: req.body.mediaLikesJS})
       res.json('Recommendation deleted.')
   })
   .catch(error => console.error(error))
-
 })
-
 
 app.listen(process.env.PORT || PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`)

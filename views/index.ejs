@@ -19,11 +19,11 @@
       <option value="Movie">Movie</option>
       <option value="TV Show">TV Show</option>
     </select>
-    <button type="submit">Submit</button>
+    <input type="submit">
   </form>
 
   <h2>Recommendations</h2>
-  <ul class="recommendations">
+  <ul class="mediaRecommendations">
     <% for(let i = 0; i < recommendations.length; i++) {%>
       <li class="recommendation">
         <span><%= recommendations[i].mediaType %>:</span>

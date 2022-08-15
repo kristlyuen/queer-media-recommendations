@@ -61,7 +61,7 @@ app.put('/addOneLike', (req, res) => {
     upsert: false
   })
   .then(result => {
-    console.log('Added one like.')
+    console.log({mediaType: req.body.mediaTypeJS})
     res.json('Like added.')
   })
   .catch(error => console.error(error))
@@ -69,9 +69,9 @@ app.put('/addOneLike', (req, res) => {
 
 // This is not working. The console.log is logging as expected, but the item isn't being deleted from the database or removed from the DOM.
 app.delete('/deleteRecommendation', (req, res) => {
-  db.collection('recommendations').deleteOne({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS, mediaLikes: req.body.mediaLikesJS})
+  db.collection('recommendations').deleteOne({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS})
   .then(result => {
-      console.log({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS, mediaLikes: req.body.mediaLikesJS})
+      console.log({mediaType: req.body.mediaTypeJS, mediaName: req.body.mediaNameJS})
       res.json('Recommendation deleted.')
   })
   .catch(error => console.error(error))
